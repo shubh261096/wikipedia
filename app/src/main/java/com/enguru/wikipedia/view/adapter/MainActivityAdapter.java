@@ -1,5 +1,6 @@
 package com.enguru.wikipedia.view.adapter;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
 
     private final List<PagesItem> pagesItemList;
     private OnItemClickListener onItemClickListener;
+    private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.imgViewThumbnail)
@@ -48,9 +50,10 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         }
     }
 
-    public MainActivityAdapter(List<PagesItem> pagesItemList, OnItemClickListener onItemClickListener) {
+    public MainActivityAdapter(List<PagesItem> pagesItemList, OnItemClickListener onItemClickListener, Context context) {
         this.pagesItemList = pagesItemList;
         this.onItemClickListener = onItemClickListener;
+        this.context = context;
     }
 
     @NonNull
@@ -81,7 +84,10 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         if (pagesItem.getThumbnail() != null && !TextUtils.isEmpty(pagesItem.getThumbnail().getSource())) {
             Picasso.get()
                     .load(pagesItem.getThumbnail().getSource())
+                    .error(R.drawable.ic_error)
                     .into(viewHolder.imgViewThumbnail);
+        } else {
+            viewHolder.imgViewThumbnail.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_error));
         }
     }
 

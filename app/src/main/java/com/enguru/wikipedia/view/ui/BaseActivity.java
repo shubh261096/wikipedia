@@ -1,12 +1,11 @@
 package com.enguru.wikipedia.view.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.Observer;
-
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import com.enguru.wikipedia.R;
 import com.enguru.wikipedia.view.receiver.NetworkChangeReceiver;

@@ -3,19 +3,14 @@ package com.enguru.wikipedia.view.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -27,9 +22,7 @@ import com.enguru.wikipedia.service.model.search.PagesItem;
 import com.enguru.wikipedia.service.model.search.SearchResponseModel;
 import com.enguru.wikipedia.service.repo.Events;
 import com.enguru.wikipedia.view.adapter.MainActivityAdapter;
-import com.enguru.wikipedia.view.receiver.NetworkChangeReceiver;
 import com.enguru.wikipedia.viewModel.MainActivityViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +40,7 @@ public class MainActivity extends BaseActivity implements MainActivityAdapter.On
     private List<PagesItem> pagesItemList = new ArrayList<>();
     MainActivityAdapter mainActivityAdapter;
     private String lastSearchText;
-    private NetworkChangeReceiver networkChangeReceiver;
     private boolean networkStatus;
-    private static Snackbar snackbar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,29 +48,15 @@ public class MainActivity extends BaseActivity implements MainActivityAdapter.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-//        /* Starting observer of Internet change*/
-//        networkChangeReceiver = new NetworkChangeReceiver();
-//        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-//        observeInternetChange();
-
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
         observeSearchResult();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rvWikipedia.setLayoutManager(layoutManager);
-        mainActivityAdapter = new MainActivityAdapter(pagesItemList, this);
+        mainActivityAdapter = new MainActivityAdapter(pagesItemList, this, getApplicationContext());
         rvWikipedia.setAdapter(mainActivityAdapter);
     }
-
-//    private void observeInternetChange() {
-//        NetworkChangeReceiver.networkChange.observe(this, new Observer<Boolean>() {
-//            @Override
-//            public void onChanged(Boolean status) {
-//
-//            }
-//        });
-//    }
 
     @Override
     public void getNetworkStatus(boolean status) {
@@ -168,10 +144,4 @@ public class MainActivity extends BaseActivity implements MainActivityAdapter.On
         intent.putExtra("pageID", pageID);
         startActivity(intent);
     }
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        unregisterReceiver(networkChangeReceiver);
-//    }
 }
