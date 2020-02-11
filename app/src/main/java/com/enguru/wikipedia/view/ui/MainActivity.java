@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,7 +33,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements MainActivityAdapter.OnItemClickListener {
 
     MainActivityViewModel mainActivityViewModel;
-    private static final String TAG = "MainActivity";
     @BindView(R.id.rvWikipedia)
     RecyclerView rvWikipedia;
     private List<PagesItem> pagesItemList = new ArrayList<>();
@@ -78,9 +76,11 @@ public class MainActivity extends BaseActivity implements MainActivityAdapter.On
 
                     if (responseEvent.isSuccess()) {
                         SearchResponseModel searchResponseModel = responseEvent.getSearchResponseModel();
-                        List<PagesItem> pagesItems = searchResponseModel.getQuery().getPages();
-                        pagesItemList.addAll(pagesItems);
-                        mainActivityAdapter.notifyDataSetChanged();
+                        if (searchResponseModel.getQuery() != null && searchResponseModel.getQuery().getPages() != null) {
+                            List<PagesItem> pagesItems = searchResponseModel.getQuery().getPages();
+                            pagesItemList.addAll(pagesItems);
+                            mainActivityAdapter.notifyDataSetChanged();
+                        }
                     } else {
                         showInformativeDialog(MainActivity.this, responseEvent.getErrorModel().getError().getInfo());
                     }
@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity implements MainActivityAdapter.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem search = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        SearchView searchView = (SearchView) search.getActionView();
         search(searchView);
         return super.onCreateOptionsMenu(menu);
     }
