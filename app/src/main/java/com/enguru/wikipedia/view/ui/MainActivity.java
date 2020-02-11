@@ -13,7 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,7 +48,7 @@ public class MainActivity extends BaseActivity implements MainActivityAdapter.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
         observeSearchResult();
 
